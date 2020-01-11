@@ -3,6 +3,12 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 
 
+// GOT ORANGES INTO THE DB,
+//  GOT THE SWITCH CASES UP
+
+
+
+
 var connection = mysql.createConnection({
     host: "localhost",
 
@@ -28,23 +34,67 @@ connection.connect(function (err) {
 
 function createFruit() {
     console.log("Inserting a new store...\n");
-    var query = connection.query(
-        "INSERT INTO store SET ?",
-        {
-            fruit: "oranges",
-            price: 3.0,
-            quantity: 2
-        },
-        function (err, res) {
-            if (err) throw err;
-            console.log(res.affectedRows + " store inserted!\n");
-            // Call updateProduct AFTER the INSERT completes
-            updateFruit();
-        }
-    );
+
+
+    inquirer
+        .prompt({
+            name: "action",
+            type: "list",
+            message: "What fruit would you like?",
+            choices: [
+                "apples",
+                "bananas",
+                "grapes",
+                "oranges",
+                "exit"
+
+
+            ]
+        })
+        .then(function (answer) {
+            switch (answer.action) {
+                case "apples":
+                    apples();
+                    break;
+
+                case "bananas":
+                    bananas();
+                    break;
+                case "grapes":
+                    grapes();
+                    break;
+                case "oranges":
+                    oranges();
+                    break;
+
+                case "exit":
+                    connection.end();
+                    break;
+            }
+        });
+
+
+
+
+    // var query = connection.query(
+    //     "INSERT INTO store SET ?",
+    //     {
+    //         fruit: "oranges",
+    //         price: 3.0,
+    //         quantity: 2
+    //     },
+    //     function (err, res) {
+    //         if (err) throw err;
+    //         console.log(res.affectedRows + " store inserted!\n");
+    //         // Call updateProduct AFTER the INSERT completes
+    //     }
+
+    // );
+
+    updateFruit();
 
     // logs the actual query being run
-    console.log(query.sql);
+    //console.log(query.sql);
 }
 
 function updateFruit() {
@@ -54,9 +104,9 @@ function updateFruit() {
 
 
 
-    
+
     var query = connection.query(
-        "UPDATE fruit SET ? WHERE ?",
+        "UPDATE store SET ? WHERE ?",
         [
             {
                 quantity: 20
