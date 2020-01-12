@@ -1,5 +1,6 @@
 //requiring mysql and inquirer
 var mysql = require("mysql");
+var env = require("dotenv").config();
 var inquirer = require("inquirer");
 
 
@@ -19,7 +20,7 @@ var connection = mysql.createConnection({
     user: "root",
 
     // Your password
-    password: "Tinkles01",
+    password: process.env.DB_PASSWORD,
     database: "amazon_DB"
 });
 
